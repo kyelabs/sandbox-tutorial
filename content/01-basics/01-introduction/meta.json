@@ -1,0 +1,7 @@
+{
+  "title": "Introduction",
+  "focus": {
+    "kye": "models.kye",
+    "data": "users.csv"
+  }
+}
