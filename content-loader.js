@@ -41,7 +41,7 @@ function getContent() {
           })),
           models: files.filter(isKye).map(file => ({
             file: file,
-            content: readFile(chapter, exercise, file)
+            code: readFile(chapter, exercise, file)
           })),
         }
     })

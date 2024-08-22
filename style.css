@@ -11,3 +11,36 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+body {
+  margin: 0px;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 25em 1fr 1fr;
+  grid-template-rows: 3em 1fr 25%;
+}
+
+header {
+  background-color: lightcoral;
+  grid-area: 1 / 1 / span 1 / span 3;
+}
+
+#lesson {
+  background-color: orange;
+  grid-area: 2 / 1 / span 2 / span 1;
+  padding: 1em;
+}
+
+#editor {
+  grid-area: 2 / 2 / span 1 / span 1;
+}
+
+#tables {
+  background-color: blue;
+  grid-area: 2 / 3 / span 1 / span 1;
+}
+
+#output {
+  background-color: black;
+  grid-area: 3 / 2 / span 1 / span 2;
+}
