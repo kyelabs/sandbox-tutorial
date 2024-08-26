@@ -3,7 +3,7 @@ import path from 'node:path';
 import { marked } from 'marked';
 import { parse as csvParse } from 'csv-parse/sync';
 
-const CONTENT_DIR = path.join(__dirname, 'content');
+const CONTENT_DIR = 'src/content';
 
 const startsWithNum = dir => /^\d{2}-/.test(dir);
 const isCSV = file => /\.csv$/.test(file);
@@ -24,7 +24,7 @@ function parseCSV(content) {
   const columns = Object.keys(data[0]);
   return {
     columns,
-    records: data.map(row => columns.map(col => row[col]))
+    rows: data.map(row => columns.map(col => row[col]))
   };
 }
 
@@ -43,8 +43,8 @@ function getContent() {
           },
           slug: exercise,
           title: exercise_meta.title,
-          html: marked.parse(readFile(chapter, exercise, 'README.md')),
-          data: files.filter(isCSV).map(file => ({
+          content: marked.parse(readFile(chapter, exercise, 'README.md')),
+          tables: files.filter(isCSV).map(file => ({
             name: file.replace(/\.csv$/, ''),
             ...parseCSV(readFile(chapter, exercise, file))
           })),
@@ -57,21 +57,23 @@ function getContent() {
   });
 };
 
-export default function kyeTutorialContentPlugin() {
+
+import * as pug from 'pug';
+
+export default function () {
   return {
-    name: 'kye-tutorial-content',
-    resolveId(id) {
-      if (id === 'content') {
-        return id;
-      }
-      return null;
-    },
-    load(id) {
-      if (id === 'content') {
-        const content = getContent();
-        return `export default ${JSON.stringify(content)}`;
-      }
-      return null
+    name: 'content-loader',
+    buildStart() {
+      this.addWatchFile('src/index.pug')
+      this.addWatchFile(CONTENT_DIR)
+      getContent().forEach(content => {
+        const html = pug.renderFile(path.join('src','index.pug'), content)
+        this.emitFile({
+          type: 'asset',
+          fileName: path.join(content.chapter.slug, content.slug + '.html'),
+          source: html
+        })
+      })
     }
-  };
+  }
 }

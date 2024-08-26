@@ -36,11 +36,61 @@ header {
 }
 
 #tables {
-  background-color: blue;
+  background-color: #e5e7eb;
   grid-area: 2 / 3 / span 1 / span 1;
+  overflow: hidden;
 }
 
 #output {
   background-color: black;
   grid-area: 3 / 2 / span 1 / span 2;
 }
+
+table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  text-align: left;
+  display: table;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+thead {
+  margin-bottom: 5px;
+  padding: 5px 1px;
+}
+
+tbody {
+  background-color: #e5e7eb;
+}
+
+th, td {
+  padding: 3px 10px;
+  border: 1px solid #e5e7eb;
+}
+
+th {
+  color: #6b7280;
+  background-color: #f9fafb;
+  border-top: none;
+  box-sizing: border-box;
+  white-space: nowrap;
+  outline: none;
+  vertical-align: middle;
+}
+
+td {
+  background-color: #fff;
+  box-sizing: content-box;
+}
+
+/* td:first-child {
+  border-left: none;
+}
+
+td:last-child {
+  border-right: none;
+} */
