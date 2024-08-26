@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { marked } from 'marked';
-import { parse as parseCSV } from 'csv-parse/sync';
+import { parse as csvParse } from 'csv-parse/sync';
 
 const CONTENT_DIR = path.join(__dirname, 'content');
 
@@ -17,6 +17,15 @@ function readDir(...filepaths) {
 function readFile(...filepaths) {
   const filepath = path.join(CONTENT_DIR, ...filepaths);
   return fs.readFileSync(filepath, 'utf-8');
+}
+
+function parseCSV(content) {
+  const data = csvParse(content, { columns: true });
+  const columns = Object.keys(data[0]);
+  return {
+    columns,
+    records: data.map(row => columns.map(col => row[col]))
+  };
 }
 
 function getContent() {
@@ -37,7 +46,7 @@ function getContent() {
           html: marked.parse(readFile(chapter, exercise, 'README.md')),
           data: files.filter(isCSV).map(file => ({
             name: file.replace(/\.csv$/, ''),
-            records: parseCSV(readFile(chapter, exercise, file), { columns: true })
+            ...parseCSV(readFile(chapter, exercise, file))
           })),
           models: files.filter(isKye).map(file => ({
             file: file,

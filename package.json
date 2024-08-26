@@ -19,5 +19,8 @@
     "plugins": {
       "postcss-nesting": {}
     }
+  },
+  "dependencies": {
+    "gridjs": "^6.2.0"
   }
 }
