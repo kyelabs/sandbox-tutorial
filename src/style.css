@@ -2,6 +2,7 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  font: 1em sans-serif;
 
   /* color: rgba(255, 255, 255, 0.87);
   background-color: #242424; */
@@ -33,12 +34,14 @@ header {
 
 #editor {
   grid-area: 2 / 2 / span 1 / span 1;
+  border-right: 1px solid #e5e7eb;
 }
 
 #tables {
-  background-color: #e5e7eb;
+  /* background-color: #e5e7eb; */
   grid-area: 2 / 3 / span 1 / span 1;
   overflow: hidden;
+  font-family: monospace;
 }
 
 #output {
@@ -70,6 +73,7 @@ tbody {
 th, td {
   padding: 3px 10px;
   border: 1px solid #e5e7eb;
+  border-left: none;
 }
 
 th {
@@ -94,3 +98,7 @@ td {
 td:last-child {
   border-right: none;
 } */
+
+.cm-editor {
+  height: 100%;
+}

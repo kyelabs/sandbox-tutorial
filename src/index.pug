@@ -8,8 +8,8 @@ html
     header
     #lesson
       .content !{content}
-    each model in models
-      #editor= model.code        
+    #editor
+      pre #{models[0].code}
     #tables
       each table in tables
         table
