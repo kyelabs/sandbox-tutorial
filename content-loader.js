@@ -64,6 +64,7 @@ export default function () {
   return {
     name: 'content-loader',
     buildStart() {
+      this.addWatchFile('src/python')
       this.addWatchFile('src/index.pug')
       this.addWatchFile(CONTENT_DIR)
       getContent().forEach(content => {

@@ -29,7 +29,13 @@ export default {
       // open: true,
       openPage: '/01-basics/01-introduction.html',
       contentBase: ['dist'],
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Cross-Origin-Opener-Policy': 'same-origin',
+				'Cross-Origin-Embedder-Policy': 'require-corp',
+				'Cross-Origin-Resource-Policy': 'cross-origin',
+			}
     }),
-    !production && livereload({ watch: 'dist' })
+    !production && livereload({ watch: ['dist'] })
 	]
 };

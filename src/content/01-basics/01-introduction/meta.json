@@ -2,6 +2,6 @@
   "title": "Introduction",
   "focus": {
     "kye": "models.kye",
-    "data": "users.csv"
+    "data": "User.csv"
   }
 }

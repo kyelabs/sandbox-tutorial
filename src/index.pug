@@ -6,11 +6,14 @@ html
     title #{title}
     link(rel='stylesheet', href='https://pyscript.net/releases/2024.1.1/core.css')
     script(type='module' src='https://pyscript.net/releases/2024.1.1/core.js')
+    script window.DATA = !{JSON.stringify(tables)}
   body
     header
     #lesson
       .content !{content}
     #editor
+      .editor-header
+        button#run Run
       pre #{models[0].code}
     #tables
       each table in tables
@@ -25,5 +28,5 @@ html
                 each value in row
                   td= value
     #output
-      script(type='py' src='/main.py', config='/pyscript.toml' terminal)
+      script(type='py' src='/main.py', config='/pyscript.toml' terminal worker)
     script(src="/bundle.js")

@@ -32,6 +32,17 @@ header {
 #editor {
   grid-area: 2 / 2 / span 1 / span 1;
   border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-flow: column-reverse;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.5em;
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 #tables {
@@ -98,4 +109,8 @@ td:last-child {
 
 .cm-editor {
   height: 100%;
+}
+
+#run {
+  width: 100px;
 }
