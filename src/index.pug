@@ -4,6 +4,8 @@ html
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     title #{title}
+    link(rel='stylesheet', href='https://pyscript.net/releases/2024.1.1/core.css')
+    script(type='module' src='https://pyscript.net/releases/2024.1.1/core.js')
   body
     header
     #lesson
@@ -23,4 +25,5 @@ html
                 each value in row
                   td= value
     #output
-    script(src="/bundle.js") 
+      script(type='py' src='/main.py', config='/pyscript.toml' terminal)
+    script(src="/bundle.js")

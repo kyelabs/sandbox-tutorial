@@ -5,6 +5,7 @@ import postcss from 'rollup-plugin-postcss';
 import contentLoader from './content-loader';
 import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
+import copy from 'rollup-plugin-copy';
 
 // `npm run build` -> `production` is true
 // `npm run dev` -> `production` is false
@@ -22,6 +23,7 @@ export default {
     postcss(),
 		commonjs(), // converts date-fns to ES modules
     contentLoader(),
+		copy({ targets: [{ src: 'src/python/*', dest: 'dist' }] }),
 		// production && terser() // minify, but only in production
     !production && serve({
       // open: true,
