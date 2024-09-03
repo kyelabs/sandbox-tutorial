@@ -3,7 +3,7 @@ import path from 'node:path';
 import { marked } from 'marked';
 import { parse as csvParse } from 'csv-parse/sync';
 
-const CONTENT_DIR = 'src/content';
+const CONTENT_DIR = 'content';
 
 const startsWithNum = dir => /^\d{2}-/.test(dir);
 const isCSV = file => /\.csv$/.test(file);
@@ -30,17 +30,27 @@ function parseCSV(content) {
 
 function getContent() {
   let index = 0;
+  let prev = null;
   return readDir().filter(startsWithNum).flatMap(chapter => {
     const chapter_meta = JSON.parse(readFile(chapter, 'meta.json'));
     return readDir(chapter).filter(startsWithNum).map(exercise => {
         const exercise_meta = JSON.parse(readFile(chapter, exercise, 'meta.json'));
         const files = readDir(chapter, exercise);
-        return {
+
+        let filepath = path.join(chapter, exercise + '.html');
+        if (prev === null) {
+          filepath = 'index.html';
+        } else if (prev.chapter.slug !== chapter) {
+          filepath = path.join(chapter, 'index.html');
+        }
+
+        const out = {
           index: index++,
           chapter: {
             slug: chapter,
             title: chapter_meta.title
           },
+          path: filepath,
           slug: exercise,
           title: exercise_meta.title,
           content: marked.parse(readFile(chapter, exercise, 'README.md')),
@@ -53,6 +63,8 @@ function getContent() {
             code: readFile(chapter, exercise, file)
           })),
         }
+        prev = out;
+        return out;
     })
   });
 };
@@ -71,7 +83,7 @@ export default function () {
         const html = pug.renderFile(path.join('src','index.pug'), content)
         this.emitFile({
           type: 'asset',
-          fileName: path.join(content.chapter.slug, content.slug + '.html'),
+          fileName: content.path,
           source: html
         })
       })

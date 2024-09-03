@@ -1,9 +1,6 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  font: 1em sans-serif;
-
+  font: 400 1em / 1.5 "Rubik", sans-serif;  
+  font-optical-sizing: auto;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -13,48 +10,65 @@
 body {
   margin: 0px;
   height: 100vh;
-  display: grid;
-  grid-template-columns: 25em 1fr 1fr;
-  grid-template-rows: 3em 1fr 25%;
+  display: flex;
+  flex-flow: column;
+}
+
+main {
+  height: 100%;
+  width: 100%;
+  display: flex;
 }
 
 header {
-  background-color: lightcoral;
-  grid-area: 1 / 1 / span 1 / span 3;
+  background-color: #F8F8F8;
+  height: 50px;
+  font-size: 23px;
+  display: flex;
+  align-items: center;
+  padding-inline: 12px;
+  gap: 12px;
+
+  color: #948E8E;
+  filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.2));
+}
+
+header #logo {
+  width: 1.4em;
+  height: 1.4em;
+}
+
+footer {
+  background-color: #F8F8F8;
+  height: 50px;
 }
 
 #lesson {
-  background-color: orange;
-  grid-area: 2 / 1 / span 2 / span 1;
+  background-color: white;
   padding: 1em;
+  max-width: 500px;
+}
+
+#sandbox {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  flex-grow: 2;
 }
 
 #editor {
-  grid-area: 2 / 2 / span 1 / span 1;
+  height: 100%;
   border-right: 1px solid #e5e7eb;
   display: flex;
   flex-flow: column-reverse;
-}
-
-.editor-header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0.5em;
-  background-color: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
+  background-color: #282c34;
 }
 
 #tables {
   /* background-color: #e5e7eb; */
-  grid-area: 2 / 3 / span 1 / span 1;
+  height: 100%;
   overflow: hidden;
   font-family: monospace;
-}
-
-#output {
-  background-color: black;
-  grid-area: 3 / 2 / span 1 / span 2;
 }
 
 table {
@@ -109,6 +123,7 @@ td:last-child {
 
 .cm-editor {
   height: 100%;
+  font-size: 14px;
 }
 
 #run {

@@ -23,7 +23,10 @@ export default {
     postcss(),
 		commonjs(), // converts date-fns to ES modules
     contentLoader(),
-		copy({ targets: [{ src: 'src/python/*', dest: 'dist' }] }),
+		copy({ targets: [
+			{ src: 'assets/*', dest: 'dist' },
+			{ src: 'src/python/*', dest: 'dist' }
+		]}),
 		// production && terser() // minify, but only in production
     !production && serve({
       // open: true,
