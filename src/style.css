@@ -45,8 +45,30 @@ footer {
 
 #lesson {
   background-color: white;
-  padding: 1em;
+  padding: 0.5em 1em;
   max-width: 500px;
+}
+
+#lesson * {
+  margin: 0px;
+}
+
+#lesson .chapter {
+  color: #BFBFBF;
+  text-transform: uppercase;
+  font-weight: 500;
+  /* line-height: 1.2; */
+}
+
+#lesson .content {
+  display: flex;
+  flex-flow: column;
+  gap: 0.5em;
+}
+
+#lesson h1 {
+  font-weight: 500;
+  font-size: 1.5em;
 }
 
 #sandbox {

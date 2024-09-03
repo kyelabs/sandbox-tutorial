@@ -6,7 +6,7 @@ html
     title #{title}
     link(rel='preconnect' href='https://fonts.googleapis.com')
     link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin)
-    link(rel='stylesheet', href='"https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap')
     link(rel='stylesheet', href='https://pyscript.net/releases/2024.1.1/core.css')
     script(type='module' src='https://pyscript.net/releases/2024.1.1/core.js')
     script window.DATA = !{JSON.stringify(tables)}
@@ -14,9 +14,10 @@ html
   body
     header
       img#logo(src='/logo.png')
-      a Lessons
+      a Learn
     main
       #lesson
+        .chapter= chapter.title
         .content !{content}
       #sandbox
         #editor
