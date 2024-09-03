@@ -1,3 +1,5 @@
+# Getting Started
+
 Hello and welcome to this tutorial!
 
 In this lesson we are going to try and see if
