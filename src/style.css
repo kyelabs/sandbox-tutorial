@@ -88,72 +88,13 @@ footer {
 }
 
 #tables {
-  /* background-color: #e5e7eb; */
+  background-color: #1e1e1e;
   height: 100%;
-  overflow: hidden;
-  font-family: monospace;
+  padding: .5em;
 }
 
-table {
-  width: 100%;
-  max-width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  text-align: left;
-  display: table;
-  margin: 0;
-  padding: 0;
-  overflow: auto;
-}
-
-thead {
-  margin-bottom: 5px;
-  padding: 5px 1px;
-}
-
-tbody {
-  background-color: #e5e7eb;
-}
-
-th, td {
-  padding: 3px 10px;
-  border: 1px solid #e5e7eb;
-  border-left: none;
-}
-
-th {
-  color: #6b7280;
-  background-color: #f9fafb;
-  border-top: none;
-  box-sizing: border-box;
-  white-space: nowrap;
-  outline: none;
-  vertical-align: middle;
-}
-
-td {
-  background-color: #fff;
-  box-sizing: content-box;
-}
-
-/* td:first-child {
-  border-left: none;
-}
-
-td:last-child {
-  border-right: none;
-} */
-
-#editor .CodeMirror {
-  height: 100%;
-}
-
-#editor .CodeMirror .CodeMirror-scroll,
-code[class*="language-"],
-pre[class*="language-"] {
-  font-family: Menlo, Monaco, 'Courier New', monospace;
-  font-size: 14px;
-  line-height: 1.3;
+.ag-theme-quartz-dark {
+  --ag-grid-size: 5px;
 }
 
 #run {
@@ -162,6 +103,10 @@ pre[class*="language-"] {
 
 /* PrismJS */
 pre[class*="language-"] {
+  font-family: Menlo, Monaco, 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+
 	color: #f8f8f2;
 	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
 	text-align: left;

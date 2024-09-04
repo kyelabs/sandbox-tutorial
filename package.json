@@ -12,6 +12,9 @@
     "pug": "^3.0.3"
   },
   "devDependencies": {
+    "@ag-grid-community/client-side-row-model": "^32.1.0",
+    "@ag-grid-community/core": "^32.1.0",
+    "@ag-grid-community/styles": "^32.1.0",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",

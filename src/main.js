@@ -1,9 +1,14 @@
+import "@ag-grid-community/styles/ag-grid.css";
+import "@ag-grid-community/styles/ag-theme-quartz.css";
 import './style.css'
-import './vscode-dark.css'
-import 'codemirror/lib/codemirror.css'
 import loader from '@monaco-editor/loader'
 import Prism from 'prismjs'
 import kyeMonarchTokens from './kye-monarch-tokens'
+
+import { ModuleRegistry, createGrid } from '@ag-grid-community/core';
+import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+
+ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 Prism.languages.kye = {
   comment: {
@@ -32,7 +37,19 @@ window.addEventListener('DOMContentLoaded', () => {
       value: code,
       language: 'kye',
       theme: 'vs-dark',
+      minimap: { enabled: false },
     })
   })
+
+  const tableData = window.DATA[0]
+  createGrid(document.getElementById('tables'), {
+    defaultColDef: {
+      editable: true,
+      cellEditor: 'agTextCellEditor',
+      flex: 1,
+    },
+    columnDefs: tableData.columns.map(field => ({ field })),
+    rowData: tableData.rows.map(row => row.reduce((acc, value, i) => ({ ...acc, [tableData.columns[i]]: value }), {})),
+  });
 })
 

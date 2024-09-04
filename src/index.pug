@@ -22,17 +22,6 @@ html
       #sandbox
         #editor
           pre #{models[0].code}
-        #tables
-          each table in tables
-            table
-              thead
-                tr
-                  each column in table.columns
-                    th= column
-              tbody
-                each row in table.rows
-                  tr
-                    each value in row
-                      td= value
+        #tables.ag-theme-quartz-dark
     footer
     script(type='py' src='/main.py', config='/pyscript.toml' worker)
