@@ -10,5 +10,7 @@ here is an example code section:
 User(id) {
   id: Number
   name: String
+  const: 12.4
+  const: "eoijf"
 }
 ```
