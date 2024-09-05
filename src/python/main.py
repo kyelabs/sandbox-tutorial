@@ -1,18 +1,24 @@
 import pandas as pd
-from pyscript import when, window
 from kye.kye import Kye
+import json
+import dataclasses
 
 print('ready')
 
-@when('', 'body')
-def on_click(event):
+def run(raw_input):
+    input = json.loads(raw_input)
+    print('running',input)
+    code = input['code']
+    model_name = input['model_name']
+    data = input['data']
     kye = Kye()
-    if kye.compile(window.code):
-        data = window.DATA[0]
-        df = pd.DataFrame(data.rows, columns=data.columns)
-        kye.load_df(data.name, df)
+    if kye.compile(code):
+        kye.load_df(model_name, pd.DataFrame(data))
     
-    if not kye.reporter.had_error:
-        print('no errors')
-    else:
-        kye.reporter.report()
+    return json.dumps([
+      dataclasses.asdict(err)
+      for err in kye.reporter.errors
+    ])
+
+# return the function to be called by javascript
+run

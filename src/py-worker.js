@@ -1,12 +1,14 @@
-const pyodideWorker = new Worker("/webworker.js", { type: "module" });
+import PyodideWorker from 'web-worker:./webworker';
 
 const callbacks = {};
 
+const pyodideWorker = new PyodideWorker();
+
 pyodideWorker.onmessage = (event) => {
-  const { id, ...data } = event.data;
+  const { id, result } = event.data;
   const onSuccess = callbacks[id];
   delete callbacks[id];
-  onSuccess(data);
+  onSuccess(result);
 };
 
 const asyncRun = (() => {

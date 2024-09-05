@@ -22,11 +22,14 @@
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-serve": "^1.1.1"
+    "rollup-plugin-serve": "^1.1.1",
+    "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-web-worker-loader": "^1.6.1"
   },
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "start": "serve dist"
+    "start": "serve dist",
+    "python-requirements": "pip install -r src/python/requirements.txt --dry-run --ignore-installed --quiet --report - | jq '[.install[] | .download_info.url']"
   }
 }

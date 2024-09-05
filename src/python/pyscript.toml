@@ -1,3 +1,0 @@
-name = "Kye Playground"
-description = "An application that runs kye scripts"
-packages = ["pandas", "kye"]

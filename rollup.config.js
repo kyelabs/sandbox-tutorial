@@ -6,6 +6,8 @@ import contentLoader from './content-loader';
 import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
 import copy from 'rollup-plugin-copy';
+import webWorkerLoader from 'rollup-plugin-web-worker-loader';
+import { string } from 'rollup-plugin-string';
 
 // `npm run build` -> `production` is true
 // `npm run dev` -> `production` is false
@@ -19,10 +21,12 @@ export default {
 		sourcemap: true
 	},
 	plugins: [
-		resolve(), // tells Rollup how to find date-fns in node_modules
+		resolve(),
     postcss(),
 		commonjs(), // converts date-fns to ES modules
     contentLoader(),
+		string({ include: '**/*.py' }),
+		webWorkerLoader({}),
 		copy({ targets: [
 			{ src: 'assets/*', dest: 'dist' },
 			{ src: 'src/python/*', dest: 'dist' }
