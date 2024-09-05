@@ -4,7 +4,7 @@ from kye.kye import Kye
 
 print('ready')
 
-@when('click', '#run')
+@when('', 'body')
 def on_click(event):
     kye = Kye()
     if kye.compile(window.code):

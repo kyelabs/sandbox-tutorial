@@ -8,6 +8,9 @@ import kyeMonarchTokens from './kye-monarch-tokens'
 import { ModuleRegistry, createGrid } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 
+import { asyncRun } from "./py-worker";
+window.asyncRun = asyncRun;
+
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 Prism.languages.kye = {
@@ -33,7 +36,7 @@ window.addEventListener('DOMContentLoaded', () => {
   loader.init().then(monaco => {
     monaco.languages.register({ id: 'kye' });
     monaco.languages.setMonarchTokensProvider('kye', kyeMonarchTokens)
-    monaco.editor.create($editor, {
+    window.editor = monaco.editor.create($editor, {
       value: code,
       language: 'kye',
       theme: 'vs-dark',
