@@ -35,7 +35,10 @@ window.addEventListener('DOMContentLoaded', async () => {
   const monaco = await loader.init()
   monaco.languages.register({ id: 'kye' });
   monaco.languages.setMonarchTokensProvider('kye', kyeMonarchTokens)
-  window.editor = monaco.editor.create($editor, {
+  monaco.editor.onDidCreateModel((model) => {
+    window.editor = model
+  })
+  monaco.editor.create($editor, {
     value: code,
     language: 'kye',
     theme: 'vs-dark',
@@ -52,8 +55,9 @@ window.addEventListener('DOMContentLoaded', async () => {
       flex: 1,
       cellClassRules: {
         'cell-error': (params) => {
-          if (params.context.errors.length === 0) return false
-          return params.context.errors.some(error => {
+          const errors = params.context.errors.filter(error => 'rows' in error)
+          if (errors.length === 0) return false
+          return errors.some(error => {
             const appliesToRow = error.rows.length == 0 || error.rows.includes(params.node.rowIndex)
             const appliesToCol = error.edges.length == 0 || error.edges.includes(params.colDef.field)
             return appliesToRow && appliesToCol
@@ -78,7 +82,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (!first_run) { $run.innerText = 'Running...' }
     first_run = false
     const errors = await pyWorker.run(
-      editor.getValue(),
+      window.editor.getValue(),
       getTableData(),
       tableData.name,
     )
@@ -87,6 +91,37 @@ window.addEventListener('DOMContentLoaded', async () => {
     tableContext.errors = errors
     window.grid.refreshCells()
     console.log('errors:', errors)
+
+    let sum = 0;
+    const lineEnds = window.editor.getValue().split('\n').map(n => sum += n.length)
+
+    monaco.editor.setModelMarkers(window.editor, 'kye', errors.map(err => {
+      if (err.msg) {
+        const start = editor.getPositionAt(err.start)
+        const end = editor.getPositionAt(err.end)
+        return {
+          startLineNumber: start.lineNumber,
+          startColumn: start.column,
+          endLineNumber: end.lineNumber,
+          endColumn: end.column,
+          message: err.msg,
+          severity: monaco.MarkerSeverity.Error
+        }
+      } else if (err.loc) {
+        const [line, col] = err.loc.split(':').map(Number)
+        return {
+          startLineNumber: line,
+          startColumn: col,
+          endLineNumber: line,
+          endColumn: lineEnds[line],
+          message: err.err,
+          severity: monaco.MarkerSeverity.Error
+        }
+      } else {
+        console.error('Error with no location:', err)
+        return
+      }
+    }).filter(n => n))
   }
   $run.onclick()
 })
