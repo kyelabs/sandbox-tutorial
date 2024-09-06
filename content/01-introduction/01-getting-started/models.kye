@@ -1,5 +1,5 @@
 User(id) {
   id: Number
   name: String
-  assert id >= 1
+  assert id > 1
 }

@@ -8,8 +8,7 @@ import kyeMonarchTokens from './kye-monarch-tokens'
 import { ModuleRegistry, createGrid } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 
-import { asyncRun } from "./py-worker";
-window.asyncRun = asyncRun;
+import pyWorker from "./py-worker";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -29,23 +28,22 @@ Prism.languages.kye = {
   variable: /\b[a-z_]+[a-z_A-Z0-9]*\b/,
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   const $editor = document.getElementById('editor')
   const code = $editor.querySelector('pre').innerText
   $editor.removeChild($editor.querySelector('pre'))
-  loader.init().then(monaco => {
-    monaco.languages.register({ id: 'kye' });
-    monaco.languages.setMonarchTokensProvider('kye', kyeMonarchTokens)
-    window.editor = monaco.editor.create($editor, {
-      value: code,
-      language: 'kye',
-      theme: 'vs-dark',
-      minimap: { enabled: false },
-    })
+  const monaco = await loader.init()
+  monaco.languages.register({ id: 'kye' });
+  monaco.languages.setMonarchTokensProvider('kye', kyeMonarchTokens)
+  window.editor = monaco.editor.create($editor, {
+    value: code,
+    language: 'kye',
+    theme: 'vs-dark',
+    minimap: { enabled: false },
   })
 
   const tableData = window.DATA[0]
-  createGrid(document.getElementById('tables'), {
+  window.grid = createGrid(document.getElementById('tables'), {
     defaultColDef: {
       editable: true,
       cellEditor: 'agTextCellEditor',
@@ -54,5 +52,28 @@ window.addEventListener('DOMContentLoaded', () => {
     columnDefs: tableData.columns.map(field => ({ field })),
     rowData: tableData.rows.map(row => row.reduce((acc, value, i) => ({ ...acc, [tableData.columns[i]]: value }), {})),
   });
+
+  const getTableData = () => {    
+    const rows = []
+    window.grid.forEachNode(node => rows.push(node.data));
+    return rows
+  }
+
+  const $run = document.getElementById('run')
+  let first_run = true
+  $run.onclick = async () => {
+    $run.setAttribute('disabled', true)
+    if (!first_run) { $run.innerText = 'Running...' }
+    first_run = false
+    const errors = await pyWorker.run(
+      editor.getValue(),
+      getTableData(),
+      tableData.name,
+    )
+    $run.removeAttribute('disabled')
+    $run.innerText = 'Run'
+    console.log('errors:', errors)
+  }
+  $run.onclick()
 })
 

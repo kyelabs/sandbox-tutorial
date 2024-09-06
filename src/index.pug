@@ -18,6 +18,8 @@ html
         .chapter= chapter.title
         .content !{content}
       #sandbox
+        #tabs
+          button#run(disabled) Loading...
         #editor
           pre #{models[0].code}
         #tables.ag-theme-quartz-dark

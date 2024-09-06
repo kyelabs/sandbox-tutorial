@@ -1,29 +1,33 @@
 import PyodideWorker from 'web-worker:./webworker';
 
-const callbacks = {};
+class WorkerInterface {
+  constructor() {
+    this.callbacks = {};
+    this.id = 0;
 
-const pyodideWorker = new PyodideWorker();
+    this.worker = new PyodideWorker();
+    this.worker.onmessage = this.onmessage.bind(this);
+  }
 
-pyodideWorker.onmessage = (event) => {
-  const { id, result } = event.data;
-  const onSuccess = callbacks[id];
-  delete callbacks[id];
-  onSuccess(result);
-};
+  onmessage(event) {
+    const { id, result } = event.data;
+    const callback = this.callbacks[id];
+    delete this.callbacks[id];
+    callback(result);
+  }
 
-const asyncRun = (() => {
-  let id = 0; // identify a Promise
-  return (data) => {
-    // the id could be generated more carefully
-    id = (id + 1) % Number.MAX_SAFE_INTEGER;
-    return new Promise((onSuccess) => {
-      callbacks[id] = onSuccess;
-      pyodideWorker.postMessage({
-        ...data,
-        id,
-      });
+  async postMessage(data) {
+    this.id = (this.id + 1) % Number.MAX_SAFE_INTEGER;
+    return new Promise((resolve) => {
+      this.callbacks[this.id] = resolve;
+      this.worker.postMessage({ ...data, id: this.id });
     });
-  };
-})();
+  }
 
-export { asyncRun };
+  async run(code, data, model_name) {
+    return this.postMessage({ code, data, model_name });
+  }
+}
+
+const pyWorker = new WorkerInterface();
+export default pyWorker;
