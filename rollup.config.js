@@ -29,7 +29,6 @@ export default {
 		webWorkerLoader({}),
 		copy({ targets: [
 			{ src: 'assets/*', dest: 'dist' },
-			{ src: 'src/python/*', dest: 'dist' }
 		]}),
 		// production && terser() // minify, but only in production
     !production && serve({
