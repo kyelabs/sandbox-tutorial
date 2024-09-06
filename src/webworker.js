@@ -1,4 +1,4 @@
-import py_script from './python/main.py';
+import py_script from './main.py';
 
 importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js");
 
