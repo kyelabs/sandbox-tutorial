@@ -7,7 +7,6 @@ print('ready')
 
 def run(raw_input):
     input = json.loads(raw_input)
-    print('running',input)
     code = input['code']
     model_name = input['model_name']
     data = input['data']

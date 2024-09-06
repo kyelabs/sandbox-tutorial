@@ -43,11 +43,23 @@ window.addEventListener('DOMContentLoaded', async () => {
   })
 
   const tableData = window.DATA[0]
+  const tableContext = {errors:[]}
   window.grid = createGrid(document.getElementById('tables'), {
+    context: tableContext,
     defaultColDef: {
       editable: true,
       cellEditor: 'agTextCellEditor',
       flex: 1,
+      cellClassRules: {
+        'cell-error': (params) => {
+          if (params.context.errors.length === 0) return false
+          return params.context.errors.some(error => {
+            const appliesToRow = error.rows.length == 0 || error.rows.includes(params.node.rowIndex)
+            const appliesToCol = error.edges.length == 0 || error.edges.includes(params.colDef.field)
+            return appliesToRow && appliesToCol
+          })
+        },
+      }
     },
     columnDefs: tableData.columns.map(field => ({ field })),
     rowData: tableData.rows.map(row => row.reduce((acc, value, i) => ({ ...acc, [tableData.columns[i]]: value }), {})),
@@ -72,6 +84,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     )
     $run.removeAttribute('disabled')
     $run.innerText = 'Run'
+    tableContext.errors = errors
+    window.grid.refreshCells()
     console.log('errors:', errors)
   }
   $run.onclick()

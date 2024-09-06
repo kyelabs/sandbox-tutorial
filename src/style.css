@@ -132,6 +132,10 @@ footer {
   --ag-grid-size: 5px;
 }
 
+.cell-error {
+  background: rgba(255,0,0,0.3);
+}
+
 #run {
   width: 100px;
 }
