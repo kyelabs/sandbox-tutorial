@@ -24,8 +24,12 @@ class WorkerInterface {
     });
   }
 
-  async run(code, data, model_name) {
-    return this.postMessage({ code, data, model_name });
+  async compile(code) {
+    return this.postMessage({ cmd: 'compile', code });
+  }
+
+  async validate(compiled, data, model_name) {
+    return this.postMessage({ cmd: 'validate', compiled, data, model_name });
   }
 }
 

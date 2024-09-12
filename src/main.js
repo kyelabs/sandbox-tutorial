@@ -28,6 +28,70 @@ Prism.languages.kye = {
   variable: /\b[a-z_]+[a-z_A-Z0-9]*\b/,
 }
 
+async function onContentChange() {
+  const response = await pyWorker.compile(
+    window.editor.getValue(),
+  )
+  if (response.errors) {
+    setCodeErrors(response.errors)
+    return
+  } else {
+    setCodeErrors([])
+    window.compiled = response.compiled
+    await onDataChange()
+  }
+}
+
+const getTableData = () => {    
+  const rows = []
+  window.grid.forEachNode(node => rows.push(node.data));
+  return rows
+}
+
+async function onDataChange() {
+  const response = await pyWorker.validate(
+    window.compiled,
+    getTableData(),
+    window.DATA[0].name,
+  )
+  const errors = response.errors
+  grid.setGridOption('context', {errors})
+  window.grid.refreshCells()
+  setCodeErrors(errors)
+}
+
+function setCodeErrors(errors) {
+  let sum = 0;
+  const lineEnds = window.editor.getValue().split('\n').map(n => sum += n.length)
+  monaco.editor.setModelMarkers(window.editor, 'kye', errors.map(err => {
+    if (err.msg) {
+      const start = editor.getPositionAt(err.start)
+      const end = editor.getPositionAt(err.end)
+      return {
+        startLineNumber: start.lineNumber,
+        startColumn: start.column,
+        endLineNumber: end.lineNumber,
+        endColumn: end.column,
+        message: err.msg,
+        severity: monaco.MarkerSeverity.Error
+      }
+    } else if (err.loc) {
+      const [line, col] = err.loc.split(':').map(Number)
+      return {
+        startLineNumber: line,
+        startColumn: col,
+        endLineNumber: line,
+        endColumn: lineEnds[line],
+        message: err.err,
+        severity: monaco.MarkerSeverity.Error
+      }
+    } else {
+      console.error('Error with no location:', err)
+      return
+    }
+  }).filter(n => n))
+}
+
 window.addEventListener('DOMContentLoaded', async () => {
   const $editor = document.getElementById('editor')
   const code = $editor.querySelector('pre').innerText
@@ -53,6 +117,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   const tableContext = {errors:[]}
   window.grid = createGrid(document.getElementById('tables'), {
     context: tableContext,
+    singleClickEdit: true,
+    stopEditingWhenCellsLoseFocus: true,
     defaultColDef: {
       editable: true,
       cellEditor: 'agTextCellEditor',
@@ -71,13 +137,10 @@ window.addEventListener('DOMContentLoaded', async () => {
     },
     columnDefs: tableData.columns.map(field => ({ field, headerName: field })),
     rowData: rowData,
+    onCellEditingStopped(event) {
+      onDataChange()
+    }
   });
-
-  const getTableData = () => {    
-    const rows = []
-    window.grid.forEachNode(node => rows.push(node.data));
-    return rows
-  }
 
   const $run = document.getElementById('run')
   let first_run = true
@@ -85,47 +148,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     $run.setAttribute('disabled', true)
     if (!first_run) { $run.innerText = 'Running...' }
     first_run = false
-    const errors = await pyWorker.run(
-      window.editor.getValue(),
-      getTableData(),
-      tableData.name,
-    )
+    await onContentChange()
     $run.removeAttribute('disabled')
     $run.innerText = 'Run'
-    tableContext.errors = errors
-    window.grid.refreshCells()
-    console.log('errors:', errors)
-
-    let sum = 0;
-    const lineEnds = window.editor.getValue().split('\n').map(n => sum += n.length)
-
-    monaco.editor.setModelMarkers(window.editor, 'kye', errors.map(err => {
-      if (err.msg) {
-        const start = editor.getPositionAt(err.start)
-        const end = editor.getPositionAt(err.end)
-        return {
-          startLineNumber: start.lineNumber,
-          startColumn: start.column,
-          endLineNumber: end.lineNumber,
-          endColumn: end.column,
-          message: err.msg,
-          severity: monaco.MarkerSeverity.Error
-        }
-      } else if (err.loc) {
-        const [line, col] = err.loc.split(':').map(Number)
-        return {
-          startLineNumber: line,
-          startColumn: col,
-          endLineNumber: line,
-          endColumn: lineEnds[line],
-          message: err.err,
-          severity: monaco.MarkerSeverity.Error
-        }
-      } else {
-        console.error('Error with no location:', err)
-        return
-      }
-    }).filter(n => n))
   }
   $run.onclick()
 })
