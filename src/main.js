@@ -153,5 +153,12 @@ window.addEventListener('DOMContentLoaded', async () => {
     $run.innerText = 'Run'
   }
   $run.onclick()
-})
 
+  document.addEventListener('keydown', (event) => {
+    if ((event.ctrlKey || event.metaKey) && (event.key === 's' || event.key === 'Enter')) {
+      event.preventDefault();
+      if ($run.hasAttribute('disabled')) return;
+      $run.click();
+    }
+  });
+})
