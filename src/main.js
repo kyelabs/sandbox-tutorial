@@ -46,6 +46,10 @@ window.addEventListener('DOMContentLoaded', async () => {
   })
 
   const tableData = window.DATA[0]
+  const rowData = tableData.rows.map(row => row.reduce((acc, value, i) => {
+    acc[tableData.columns[i]] = value;
+    return acc
+  }, {}))
   const tableContext = {errors:[]}
   window.grid = createGrid(document.getElementById('tables'), {
     context: tableContext,
@@ -58,15 +62,15 @@ window.addEventListener('DOMContentLoaded', async () => {
           const errors = params.context.errors.filter(error => 'rows' in error)
           if (errors.length === 0) return false
           return errors.some(error => {
-            const appliesToRow = error.rows.length == 0 || error.rows.includes(params.node.rowIndex)
+            const appliesToRow = error.rows.length == 0 || error.rows.includes(parseInt(params.node.id))
             const appliesToCol = error.edges.length == 0 || error.edges.includes(params.colDef.field)
             return appliesToRow && appliesToCol
           })
         },
       }
     },
-    columnDefs: tableData.columns.map(field => ({ field })),
-    rowData: tableData.rows.map(row => row.reduce((acc, value, i) => ({ ...acc, [tableData.columns[i]]: value }), {})),
+    columnDefs: tableData.columns.map(field => ({ field, headerName: field })),
+    rowData: rowData,
   });
 
   const getTableData = () => {    
