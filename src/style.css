@@ -48,12 +48,23 @@ header #logo {
 footer {
   background-color: #F8F8F8;
   height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 25px;
+}
+
+footer a:link, footer a:visited {
+  font-weight: 500;
+  font-size: 18px;
+  color: #AE49FD;
+  text-decoration: none;
 }
 
 #lesson {
   background-color: white;
   padding: 0.5em 1em;
-  max-width: 500px;
+  width: 430px;
 }
 
 #lesson * {
@@ -81,8 +92,7 @@ footer {
 #sandbox {
   display: flex;
   flex-flow: column;
-  width: 100%;
-  flex-grow: 2;
+  flex-grow: 1;
 }
 
 #tabs {
@@ -161,7 +171,6 @@ pre[class*="language-"] {
   overflow: auto;
   border-radius: 0.3em;
   background: #282c34;
-  /* background: #1f1f1f; */
 }
 
 .token.class-name { color: #4EC9B0 }

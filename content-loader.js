@@ -1,7 +1,8 @@
-import fs from 'node:fs';
+import fs, { read } from 'node:fs';
 import path from 'node:path';
 import { marked } from 'marked';
 import { parse as csvParse } from 'csv-parse/sync';
+import * as cheerio from 'cheerio';
 
 const CONTENT_DIR = 'content';
 
@@ -19,8 +20,12 @@ function readFile(...filepaths) {
   return fs.readFileSync(filepath, 'utf-8');
 }
 
-function parseCSV(content) {
-  const data = csvParse(content, { columns: true });
+function readMarkdown(...filepaths) {
+  return cheerio.load(marked.parse(readFile(...filepaths)));
+}
+
+function readCSV(...filepaths) {
+  const data = csvParse(readFile(...filepaths), { columns: true });
   const columns = Object.keys(data[0]);
   return {
     columns,
@@ -32,9 +37,10 @@ function getContent() {
   let index = 0;
   let prev = null;
   return readDir().filter(startsWithNum).flatMap(chapter => {
-    const chapter_meta = JSON.parse(readFile(chapter, 'meta.json'));
+    const $chapter = readMarkdown(chapter, 'README.md');
+    const chapter_title = $chapter('h1').text();
     return readDir(chapter).filter(startsWithNum).map(exercise => {
-        const exercise_meta = JSON.parse(readFile(chapter, exercise, 'meta.json'));
+        const $ = readMarkdown(chapter, exercise, 'README.md');
         const files = readDir(chapter, exercise);
 
         let filepath = path.join(chapter, exercise + '.html');
@@ -43,26 +49,32 @@ function getContent() {
         } else if (prev.chapter.slug !== chapter) {
           filepath = path.join(chapter, 'index.html');
         }
-
+        
         const out = {
           index: index++,
           chapter: {
             slug: chapter,
-            title: chapter_meta.title
+            title: chapter_title
           },
           path: filepath,
           slug: exercise,
-          title: exercise_meta.title,
-          content: marked.parse(readFile(chapter, exercise, 'README.md')),
+          title: $('h1').text(),
+          content: $.html(),
           tables: files.filter(isCSV).map(file => ({
             name: file.replace(/\.csv$/, ''),
-            ...parseCSV(readFile(chapter, exercise, file))
+            ...readCSV(chapter, exercise, file)
           })),
           models: files.filter(isKye).map(file => ({
             file: file,
             code: readFile(chapter, exercise, file)
           })),
+          links: {
+            prev: prev?.path,
+            next: null,
+          }
         }
+        if (prev)
+          prev.links.next = out.path;
         prev = out;
         return out;
     })
@@ -76,7 +88,6 @@ export default function () {
   return {
     name: 'content-loader',
     buildStart() {
-      this.addWatchFile('src/python')
       this.addWatchFile('src/index.pug')
       this.addWatchFile(CONTENT_DIR)
       getContent().forEach(content => {

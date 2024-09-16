@@ -4,21 +4,22 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
-    "csv-parse": "^5.5.6",
     "gridjs": "^6.2.0",
-    "prismjs": "^1.29.0",
-    "pug": "^3.0.3"
+    "prismjs": "^1.29.0"
   },
   "devDependencies": {
     "@ag-grid-community/client-side-row-model": "^32.1.0",
     "@ag-grid-community/core": "^32.1.0",
     "@ag-grid-community/styles": "^32.1.0",
+    "@monaco-editor/loader": "^1.4.0",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
-    "@monaco-editor/loader": "^1.4.0",
+    "cheerio": "^1.0.0",
+    "csv-parse": "^5.5.6",
     "marked": "^14.0.0",
     "npm-run-all": "^4.1.5",
+    "pug": "^3.0.3",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-postcss": "^4.0.2",

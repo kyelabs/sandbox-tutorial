@@ -24,3 +24,12 @@ html
           pre #{models[0].code}
         #tables.ag-theme-quartz-dark
     footer
+      if links.prev
+        a.prev(href='/'+links.prev) ← Previous
+      else 
+        a.prev
+      
+      if links.next
+        a.next(href='/'+links.next) Next →
+      else 
+        a.next
