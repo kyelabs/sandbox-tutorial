@@ -1,5 +1,5 @@
-id,name
-1,John
-2,Jane
-3,Joe
-4,Jill
+id,name,age
+1,John,25
+2,Jane,22
+3,Joe,-15
+4,Jill,28

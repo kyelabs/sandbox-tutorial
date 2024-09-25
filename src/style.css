@@ -65,29 +65,38 @@ footer a:link, footer a:visited {
   background-color: white;
   padding: 0.5em 1em;
   width: 430px;
+  display: flex;
+  flex-flow: column;
+  gap: 2em;
 }
 
 #lesson * {
   margin: 0px;
 }
 
-#lesson .chapter {
-  color: #BFBFBF;
-  text-transform: uppercase;
+#lesson .header {
   font-weight: 500;
-  /* line-height: 1.2; */
+  color: #9d9d9d;
+}
+
+#lesson .header .title {
+  color: #767676;
+  /* text-transform: uppercase; */
 }
 
 #lesson .content {
   display: flex;
   flex-flow: column;
-  gap: 0.5em;
+  gap: 1em;
 }
 
-#lesson h1 {
+h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
-  font-size: 1.5em;
+  padding-top: 1em;
 }
+
+h1 { font-size: 1.5em; }
+h2 { font-size: 1.2em; }
 
 #sandbox {
   display: flex;

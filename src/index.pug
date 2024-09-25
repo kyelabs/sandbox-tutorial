@@ -15,8 +15,13 @@ html
       a Learn
     main
       #lesson
-        .chapter= chapter.title
+        .header
+          span.chapter= chapter.title
+          span  / 
+          span.title= title
         .content !{content}
+        if links.next.path
+          a.next(href='/'+links.next.path) Next: #{links.next.title}
       #sandbox
         #tabs
           button#run(disabled) Loading...
@@ -24,12 +29,12 @@ html
           pre #{models[0].code}
         #tables.ag-theme-quartz-dark
     footer
-      if links.prev
-        a.prev(href='/'+links.prev) ← Previous
+      if links.prev.path
+        a.prev(href='/'+links.prev.path) ← Previous
       else 
         a.prev
       
-      if links.next
-        a.next(href='/'+links.next) Next →
+      if links.next.path
+        a.next(href='/'+links.next.path) Next →
       else 
         a.next
