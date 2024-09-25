@@ -38,27 +38,30 @@ function getContent() {
   let prev = null;
   return readDir().filter(startsWithNum).flatMap(chapter => {
     const $chapter = readMarkdown(chapter, 'README.md');
+    const chapter_slug = chapter.split('-')[1];
     const chapter_title = $chapter('h1').text();
     return readDir(chapter).filter(startsWithNum).map(exercise => {
         const $ = readMarkdown(chapter, exercise, 'README.md');
+        const $title = $('h1').first().remove();
+        const exercise_slug = exercise.split('-')[1];
         const files = readDir(chapter, exercise);
 
-        let filepath = path.join(chapter, exercise + '.html');
+        let filepath = path.join(chapter_slug, exercise_slug + '.html');
         if (prev === null) {
           filepath = 'index.html';
-        } else if (prev.chapter.slug !== chapter) {
-          filepath = path.join(chapter, 'index.html');
+        } else if (prev.chapter.slug !== chapter_slug) {
+          filepath = path.join(chapter_slug, 'index.html');
         }
         
         const out = {
           index: index++,
           chapter: {
-            slug: chapter,
+            slug: chapter_slug,
             title: chapter_title
           },
           path: filepath,
-          slug: exercise,
-          title: $('h1').text(),
+          slug: exercise_slug,
+          title: $title.text(),
           content: $.html(),
           tables: files.filter(isCSV).map(file => ({
             name: file.replace(/\.csv$/, ''),
