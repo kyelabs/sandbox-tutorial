@@ -160,7 +160,7 @@ h2 { font-size: 1.2em; }
 }
 
 /* PrismJS */
-pre[class*="language-"] {
+pre, :not(pre) > code {
   font-family: Menlo, Monaco, 'Courier New', monospace;
   font-size: 12px;
   line-height: 1.4;
@@ -175,16 +175,22 @@ pre[class*="language-"] {
 	tab-size: 2;
 	hyphens: none;
 
-  padding: .7em 1em;
-  margin: .5em 0;
-  overflow: auto;
-  border-radius: 0.3em;
   background: #282c34;
+  border-radius: .3em;
+}
+
+:not(pre) > code {
+  padding: .3em .5em;
+}
+
+pre {
+  padding: .7em 1em;
+  overflow: auto;
 }
 
 .token.class-name { color: #4EC9B0 }
 .token.variable { color: #9CDCFE }
 .token.number { color: #B5CEA8 }
 .token.string { color: #CE9178 }
-
+.token.keyword { color: #C586C0 }
 

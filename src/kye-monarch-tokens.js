@@ -2,9 +2,13 @@
 
 export default {
   defaultToken: 'invalid',
-  keywords: [
+
+  control: [
     'if','else','assert','return','operation','to','from','null',
     'in','is','and','or','not',
+  ],
+
+  builtin: [
     'TRUE','FALSE','NULL',
     'this'
   ],
@@ -22,7 +26,8 @@ export default {
   tokenizer: {
     root: [
       // identifiers and keywords
-      [/[a-z_$][\w$]*/, { cases: { '@keywords': 'keyword',
+      [/[a-z_$][\w$]*/, { cases: { '@control': 'keyword.control',
+                                   '@builtin': 'keyword.builtin',
                                    '@default': 'variable' } }],
       [/[A-Z_$][\w$]*/, { token: 'type.identifier' } ],
 

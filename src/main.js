@@ -97,6 +97,17 @@ window.addEventListener('DOMContentLoaded', async () => {
   const code = $editor.querySelector('pre').innerText
   $editor.removeChild($editor.querySelector('pre'))
   const monaco = await loader.init()
+  monaco.editor.defineTheme('default', {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [
+      {
+        token: 'keyword.control',
+        foreground: 'C586C0',
+      }
+    ],
+    colors: {},
+  })
   monaco.languages.register({ id: 'kye' });
   monaco.languages.setMonarchTokensProvider('kye', kyeMonarchTokens)
   monaco.editor.onDidCreateModel((model) => {
@@ -105,7 +116,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   monaco.editor.create($editor, {
     value: code,
     language: 'kye',
-    theme: 'vs-dark',
+    theme: 'default',
     minimap: { enabled: false },
   })
 
