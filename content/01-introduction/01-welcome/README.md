@@ -1,4 +1,4 @@
-# Getting Started
+# Welcome to Kye
 
 Hello and welcome to this tutorial!
 
