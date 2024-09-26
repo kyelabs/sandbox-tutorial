@@ -6,6 +6,8 @@ import dataclasses
 
 print('ready')
 
+__all__ = ['compile', 'validate']
+
 def compile(code):
     kye = Kye()
     if kye.compile(code):
@@ -30,16 +32,3 @@ def validate(compiled, data, model_name):
         for err in kye.reporter.errors
       ]
     }
-
-def run(raw_input):
-    input = json.loads(raw_input)
-    cmd = input.pop('cmd')
-    assert cmd is not None, 'cmd is required'
-    if cmd == 'compile':
-      out = compile(**input)
-    elif cmd == 'validate':
-      out = validate(**input)    
-    return json.dumps(out)
-
-# return the function to be called by javascript
-run
