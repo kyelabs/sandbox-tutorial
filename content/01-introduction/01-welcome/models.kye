@@ -2,5 +2,4 @@ User(id) {
   id: Number
   name: String
   age: Number
-  assert age >= 0
 }

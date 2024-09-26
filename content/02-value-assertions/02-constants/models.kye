@@ -1,0 +1,8 @@
+Order(id) {
+  id: Number
+  store: String
+  assert store == "SuperMart"
+  product: String
+  quantity: Number
+  price: Number
+}

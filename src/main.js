@@ -130,6 +130,10 @@ window.addEventListener('DOMContentLoaded', async () => {
     context: tableContext,
     singleClickEdit: true,
     stopEditingWhenCellsLoseFocus: true,
+    autoSizeStrategy: {
+      type: 'fitCellContents',
+      colIds: ['id'],
+    },
     defaultColDef: {
       editable: true,
       cellEditor: 'agTextCellEditor',

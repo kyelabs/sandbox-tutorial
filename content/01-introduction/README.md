@@ -1,4 +1,4 @@
 # Introduction
 
-1. [Getting Started](./01-getting-started/README.md)
-2. [Next Steps](./02-next-steps/README.md)
+1. [Welcome to Kye](./01-welcome)
+2. [How to use tutorial](./02-how-to-use-tutorial)

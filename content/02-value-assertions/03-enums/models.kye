@@ -1,0 +1,7 @@
+Order(id) {
+  id: Number
+  product: String
+  status: "SHIPPED" | "DELIVERED"
+  quantity: Number
+  price: Number
+}

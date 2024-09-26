@@ -1,0 +1,11 @@
+id,store,product,quantity,price
+1,SuperMart,Apples,10,1.50
+2,SuperMart,Bananas,5,0.75
+3,SuperMart,Carrots,7,0.60
+4,SuperMart,Detergent,2,5.00
+5,SuperMart,Milk,3,2.50
+6,SuperMart,Bread,4,1.20
+7,SuperMart,Chicken,6,7.00
+8,SuperMart,Cheese,8,3.50
+9,SuperMart,Tomatoes,12,0.90
+10,SuperMart,Orange Juice,2,3.00
