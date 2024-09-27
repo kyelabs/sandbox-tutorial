@@ -21,7 +21,6 @@ async function runPython(pyodide) {
     API[name] = namespace.get(name);
   });
   namespace.destroy();
-  console.log(API)
 }
 
 async function init() {
@@ -49,5 +48,5 @@ async function run(cmd, data) {
 self.onmessage = async (event) => {
   const { id, cmd, ...data } = event.data;
   const result = await run(cmd, data);
-  self.postMessage({ id, result });
+  event.source.postMessage({ id, result });
 };

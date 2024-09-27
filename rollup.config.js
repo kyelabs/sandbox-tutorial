@@ -14,11 +14,18 @@ import { string } from 'rollup-plugin-string';
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-	input: 'src/main.js',
+	input: {
+		app: 'src/main.js',
+		'service-worker': 'src/sw.js',
+	},
 	output: {
-		file: 'dist/bundle.js',
-		format: 'iife', // immediately-invoked function expression — suitable for <script> tags
-		sourcemap: true
+		dir: 'dist',
+		format: 'es', // ES module — suitable for import statement
+		// format: 'iife', // immediately-invoked function expression — suitable for <script> tags
+		sourcemap: true,
+		entryFileNames: assetInfo => {
+			return assetInfo.name === 'service-worker' ? 'sw.js' : 'bundle.js';
+		}
 	},
 	plugins: [
 		resolve(),

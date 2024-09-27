@@ -1,37 +1,20 @@
-import PyodideWorker from 'web-worker:./webworker';
+const callbacks = {};
+let id = 0;
 
-class WorkerInterface {
-  constructor() {
-    this.callbacks = {};
-    this.id = 0;
+navigator.serviceWorker.register('/sw.js');
+navigator.serviceWorker.addEventListener('message', (event) => {
+  const { id, result } = event.data;
+  const callback = callbacks[id];
+  delete callbacks[id];
+  callback(result);
+});
 
-    this.worker = new PyodideWorker();
-    this.worker.onmessage = this.onmessage.bind(this);
-  }
-
-  onmessage(event) {
-    const { id, result } = event.data;
-    const callback = this.callbacks[id];
-    delete this.callbacks[id];
-    callback(result);
-  }
-
-  async postMessage(data) {
-    this.id = (this.id + 1) % Number.MAX_SAFE_INTEGER;
-    return new Promise((resolve) => {
-      this.callbacks[this.id] = resolve;
-      this.worker.postMessage({ ...data, id: this.id });
+export function run (cmd, data) {
+  id = (id + 1) % Number.MAX_SAFE_INTEGER;
+  return new Promise((resolve) => {
+    callbacks[id] = resolve;
+    navigator.serviceWorker.ready.then(registration => {
+      registration.active.postMessage({ ...data, cmd, id });
     });
-  }
-
-  async compile(code) {
-    return this.postMessage({ cmd: 'compile', code });
-  }
-
-  async validate(compiled, data, model_name) {
-    return this.postMessage({ cmd: 'validate', compiled, data, model_name });
-  }
+  });
 }
-
-const pyWorker = new WorkerInterface();
-export default pyWorker;

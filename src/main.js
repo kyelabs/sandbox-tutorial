@@ -8,7 +8,7 @@ import kyeMonarchTokens from './kye-monarch-tokens'
 import { ModuleRegistry, createGrid } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 
-import pyWorker from "./py-worker";
+import * as api from "./py-worker";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -29,9 +29,9 @@ Prism.languages.kye = {
 }
 
 async function onContentChange() {
-  const response = await pyWorker.compile(
-    window.editor.getValue(),
-  )
+  const response = await api.run('compile', {
+    code: window.editor.getValue()
+  })
   if (response.errors) {
     setCodeErrors(response.errors)
     return
@@ -49,11 +49,11 @@ const getTableData = () => {
 }
 
 async function onDataChange() {
-  const response = await pyWorker.validate(
-    window.compiled,
-    getTableData(),
-    window.DATA[0].name,
-  )
+  const response = await api.run('validate',{
+    compiled: window.compiled,
+    data: getTableData(),
+    model_name: window.DATA[0].name,
+  })
   const errors = response.errors
   grid.setGridOption('context', {errors})
   window.grid.refreshCells()
