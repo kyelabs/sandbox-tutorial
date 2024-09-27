@@ -1,4 +1,4 @@
-import fs, { read } from 'node:fs';
+import fs from 'node:fs';
 import path from 'node:path';
 import { marked } from 'marked';
 import { parse as csvParse } from 'csv-parse/sync';

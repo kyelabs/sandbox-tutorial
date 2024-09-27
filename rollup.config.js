@@ -1,6 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import { terser } from '@rollup/plugin-terser';
+import terser from '@rollup/plugin-terser';
 import postcss from 'rollup-plugin-postcss';
 import contentLoader from './content-loader';
 import serve from 'rollup-plugin-serve';
@@ -20,8 +20,7 @@ export default {
 	},
 	output: {
 		dir: 'dist',
-		format: 'es', // ES module — suitable for import statement
-		// format: 'iife', // immediately-invoked function expression — suitable for <script> tags
+		format: 'es',
 		sourcemap: true,
 		entryFileNames: assetInfo => {
 			return assetInfo.name === 'service-worker' ? 'sw.js' : 'bundle.js';
@@ -37,7 +36,7 @@ export default {
 		copy({ targets: [
 			{ src: 'assets/*', dest: 'dist' },
 		]}),
-		// production && terser() // minify, but only in production
+		production && terser(), // minify, but only in production
     !production && serve({
       // open: true,
       contentBase: ['dist'],
