@@ -8,7 +8,7 @@ import kyeMonarchTokens from './kye-monarch-tokens'
 import { ModuleRegistry, createGrid } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 
-import * as api from "./py-worker";
+import * as api from "./api";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
